@@ -5,6 +5,7 @@ import UserPlusIcon from './icons/UserPlusIcon';
 import EditIcon from './icons/EditIcon';
 import ShieldCheckIcon from './icons/ShieldCheckIcon';
 import HistoryIcon from './icons/HistoryIcon';
+import BusinessIcon from './icons/BusinessIcon';
 
 interface SidebarProps {
   activeView: string;
@@ -51,9 +52,16 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, closeSideb
   return (
     <aside className="bg-slate-800/80 backdrop-blur-md text-white w-64 space-y-6 py-7 px-2 h-full flex flex-col">
       <div className="text-white text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-pink-500">
-        Butter Key
+        Butter Platform
       </div>
       <nav className="flex-1 space-y-2">
+         <NavItem
+          icon={<BusinessIcon />}
+          label="Bussiness"
+          viewName="business"
+          activeView={activeView}
+          onClick={handleNavClick}
+        />
         <NavItem
           icon={<KeyIcon />}
           label="Key Management"
@@ -91,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, closeSideb
         />
       </nav>
       <div className="text-center text-xs text-slate-500">
-        <p>&copy; {new Date().getFullYear()} Butter Key Management</p>
+        <p>&copy; {new Date().getFullYear()} Butter Platform</p>
       </div>
     </aside>
   );

@@ -9,7 +9,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 
 // Set this to true to bypass login for development and testing
-const TEST_MODE = true;
+const TEST_MODE = false;
 
 // A mock user object that satisfies the FirebaseUser interface for testing
 const mockUser: FirebaseUser = {
@@ -68,6 +68,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
+      console.log('Auth state changed. Current user:', user?.displayName);
       setLoading(false);
     });
 

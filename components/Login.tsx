@@ -11,7 +11,7 @@ const Login: React.FC = () => {
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-slate-900 to-slate-800">
       <div className="w-full max-w-md text-center">
         <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-pink-500 mb-4">
-          Butter Key Management
+          Butter Platform
         </h1>
         <p className="text-slate-400 mb-8">
           Securely manage your keys and permissions.
@@ -27,7 +27,7 @@ const Login: React.FC = () => {
             >
                 Sign in with Google
             </Button>
-            <Button
+            {/* <Button
                 onClick={signInWithMicrosoft}
                 variant="secondary"
                 size="lg"
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
                 icon={<AppleLogo />}
             >
                 Sign in with Apple
-            </Button>
+            </Button> */}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 {
-  "name": "Butter Key Management",
+  "name": "Butter Platform",
   "description": "A secure, client-side application for managing security keys. The app allows users to link admins, sign content, and apply security policies, with authentication powered by Firebase.",
   "requestFramePermissions": []
 }

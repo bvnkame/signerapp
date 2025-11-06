@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ user, toggleSidebar }) => {
         
         <div className="hidden lg:block">
           <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-pink-500">
-            Butter Key Management
+            BP Management
           </h1>
         </div>
 

@@ -15,6 +15,7 @@ import AdminsView from './views/AdminsView';
 import SignerView from './views/SignerView';
 import PolicyEditorView from './views/PolicyEditorView';
 import ActivePoliciesView from './views/ActivePoliciesView';
+import BusinessView from './views/BusinessView';
 
 const defaultPolicy =
 `service cloud.firestore {
@@ -36,7 +37,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }) => {
     const [policyNpub, setPolicyNpub] = useState('');
     const [policyContent, setPolicyContent] = useState(defaultPolicy);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
-    const [activeView, setActiveView] = useState('keys'); // Default view
+    const [activeView, setActiveView] = useState('business');
 
     // Handlers
     const handleGenerateKeys = useCallback(() => {
@@ -99,6 +100,8 @@ const Dashboard: React.FC<{ user: User }> = ({ user }) => {
     
     const renderActiveView = () => {
         switch(activeView) {
+            case 'business':
+                return <BusinessView />;
             case 'keys':
                 return <KeyManagementView />;
             case 'admins':

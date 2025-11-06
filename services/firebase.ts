@@ -38,6 +38,9 @@ const appleProvider = new OAuthProvider('apple.com');
 export const signInWithGoogle = async () => {
   try {
     await signInWithPopup(auth, googleProvider);
+    // Get user info
+    const user = auth.currentUser;
+    console.log("User signed in:", user);
   } catch (error) {
     console.error("Error signing in with Google", error);
   }
