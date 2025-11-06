@@ -1,5 +1,13 @@
 {
   "projects": {
-    "default": "bvnkame"
+    "default": "breadsliceplatform",
+    "targets": {
+      "breadsliceplatform": {
+        "hosting": {
+          "site": "breadsliceplatform",
+          "target": "breadsliceplatform"
+        }
+      }
+    }
   }
 }

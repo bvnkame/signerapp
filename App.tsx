@@ -3,10 +3,11 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 // FIX: Module '"firebase/auth"' has no exported member 'onAuthStateChanged' and 'User'. Changed import from 'firebase/auth' to '@firebase/auth' to fix module resolution issues.
 import { onAuthStateChanged } from '@firebase/auth';
 import type { User as FirebaseUser } from '@firebase/auth';
-import { auth } from './services/firebase';
+import { auth } from './src/services/firebase';
 import type { User } from './types';
-import Login from './components/Login';
-import Dashboard from './components/Dashboard';
+import Login from './src/components/Login';
+import Dashboard from './src/components/Dashboard';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 // Set this to true to bypass login for development and testing
 const TEST_MODE = false;
@@ -94,9 +95,17 @@ export const useAuth = () => {
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
+     <Auth0Provider
+      domain={import.meta.env.VITE_AUTH0_DOMAIN}
+      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+      authorizationParams={{
+        redirect_uri: window.location.origin
+      }}
+    >
+    {/* // <AuthProvider> */}
       <Main />
-    </AuthProvider>
+    {/* // </AuthProvider> */}
+    </Auth0Provider>
   );
 };
 

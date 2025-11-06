@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 // FIX: Module '"firebase/auth"' has no exported member 'User'. Changed import from 'firebase/auth' to '@firebase/auth' to fix module resolution issues.
 import type { User } from '@firebase/auth';
-import type { KeyPair, SignedEvent, Policies } from '../types';
+import type { KeyPair, SignedEvent, Policies } from '../../types';
 import { nostrService } from '../services/nostrService';
 import { DashboardContext } from '../contexts/DashboardContext';
 import Header from './Header';
@@ -16,6 +16,7 @@ import SignerView from './views/SignerView';
 import PolicyEditorView from './views/PolicyEditorView';
 import ActivePoliciesView from './views/ActivePoliciesView';
 import BusinessView from './views/BusinessView';
+import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 
 const defaultPolicy =
 `service cloud.firestore {
@@ -38,6 +39,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }) => {
     const [policyContent, setPolicyContent] = useState(defaultPolicy);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [activeView, setActiveView] = useState('business');
+    const { user: authUser, accessToken, isLoading } = useAuthenticatedUser();
 
     // Handlers
     const handleGenerateKeys = useCallback(() => {

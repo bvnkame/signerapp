@@ -1,6 +1,6 @@
 // FIX: Switched to a namespace import for `nostr-tools` to resolve the module loading error "does not provide an export named...". This is a common issue with how some libraries are bundled for CDN usage.
 import * as nostrTools from 'nostr-tools';
-import type { KeyPair, SignedEvent } from '../types';
+import type { KeyPair, SignedEvent } from '../../types';
 
 // Helper functions for hex encoding/decoding, as nostr-tools operates on Uint8Arrays for private keys.
 const bytesToHex = (bytes: Uint8Array): string => {

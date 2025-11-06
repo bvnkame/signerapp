@@ -5,8 +5,12 @@ import Button from './Button';
 import GoogleLogo from './icons/GoogleLogo';
 import MicrosoftLogo from './icons/MicrosoftLogo';
 import AppleLogo from './icons/AppleLogo';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Login: React.FC = () => {
+  const { isAuthenticated, isLoading } = useAuth0();
+  const { loginWithPopup } = useAuth0();
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-slate-900 to-slate-800">
       <div className="w-full max-w-md text-center">
@@ -19,7 +23,7 @@ const Login: React.FC = () => {
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl shadow-lg p-8 space-y-4">
             <h2 className="text-lg font-semibold text-slate-200">Sign in to continue</h2>
             <Button
-                onClick={signInWithGoogle}
+                onClick={loginWithPopup}
                 variant="secondary"
                 size="lg"
                 className="w-full"
@@ -27,6 +31,8 @@ const Login: React.FC = () => {
             >
                 Sign in with Google
             </Button>
+
+            <p>{isAuthenticated ? "Logged in" : "Not logged in"} </p>
             {/* <Button
                 onClick={signInWithMicrosoft}
                 variant="secondary"

@@ -1,6 +1,6 @@
 
 import { createContext, useContext } from 'react';
-import type { KeyPair, SignedEvent, Policies } from '../types';
+import type { KeyPair, SignedEvent, Policies } from '../../types';
 
 interface DashboardContextType {
   keyPair: KeyPair | null;
