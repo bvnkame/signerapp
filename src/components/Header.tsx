@@ -6,6 +6,7 @@ import type { User } from '@firebase/auth';
 import { signOutUser } from '../services/firebase';
 import Button from './Button';
 import MenuIcon from './icons/MenuIcon';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface HeaderProps {
   user: User;
@@ -13,6 +14,16 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ user, toggleSidebar }) => {
+  const { logout } = useAuth0();
+
+  const handleLogout = () => {
+    logout({ 
+      logoutParams: { 
+        returnTo: window.location.origin 
+      } 
+    });
+  }
+  
   return (
     <header className="bg-slate-900/50 backdrop-blur-sm border-b border-slate-700 p-4 sticky top-0 z-30">
       <div className="container mx-auto flex justify-between items-center">
@@ -32,14 +43,14 @@ const Header: React.FC<HeaderProps> = ({ user, toggleSidebar }) => {
             <p className="font-semibold text-slate-200 hidden sm:block">{user?.displayName}</p>
             <p className="text-sm text-slate-400 hidden sm:block">{user?.email}</p>
           </div>
-          {user?.photoURL && (
+          {user?.picture && (
             <img
-              src={user.photoURL}
+              src={user.picture}
               alt="User profile"
               className="w-10 h-10 rounded-full border-2 border-slate-600"
             />
           )}
-          <Button onClick={signOutUser} variant="secondary" size="sm">
+          <Button onClick={handleLogout} variant="secondary" size="sm">
             Sign Out
           </Button>
         </div>

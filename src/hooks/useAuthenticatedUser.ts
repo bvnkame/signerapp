@@ -7,7 +7,12 @@ export function useAuthenticatedUser() {
 
   useEffect(() => {
     if (isAuthenticated && !isLoading) {
-      getAccessTokenSilently()
+      getAccessTokenSilently({
+        authorizationParams: {
+          audience: "https://auth.breadslice.com",
+          scope: "email"
+        }
+      })
         .then(token => setAccessToken(token))
         .catch(console.error);
     }

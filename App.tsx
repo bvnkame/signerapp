@@ -8,6 +8,8 @@ import type { User } from './types';
 import Login from './src/components/Login';
 import Dashboard from './src/components/Dashboard';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { useAuthenticatedUser } from './src/hooks/useAuthenticatedUser';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // Set this to true to bypass login for development and testing
 const TEST_MODE = false;
@@ -57,6 +59,7 @@ const AuthContext = createContext<{ user: User }>({ user: null });
 
 // 2. Create Auth Provider
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user: authUser, accessToken, isLoading } = useAuthenticatedUser();
   const [user, setUser] = useState<User>(null);
   const [loading, setLoading] = useState(true);
 
@@ -66,15 +69,17 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       setLoading(false);
       return;
     }
-    
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      console.log('Auth state changed. Current user:', user?.displayName);
-      setLoading(false);
-    });
 
-    return () => unsubscribe();
-  }, []);
+    console.log("Auth User from Auth0:", authUser, accessToken);
+    // return () => unsubscribe();
+    setUser(authUser);
+    setLoading(false);
+  }, [authUser]);
+
+  useEffect(() => {
+    console.log("AuthContext User updated:", accessToken);
+  }, [accessToken]);
+
 
   if (loading) {
     return (
@@ -83,7 +88,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       </div>
     );
   }
-
   return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
 };
 
@@ -95,17 +99,22 @@ export const useAuth = () => {
 
 const App: React.FC = () => {
   return (
+    <GoogleOAuthProvider
+      clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+    >
      <Auth0Provider
       domain={import.meta.env.VITE_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
       authorizationParams={{
-        redirect_uri: window.location.origin
+        scope: "openid email profile",
+        redirect_uri: window.location.origin,
       }}
     >
-    {/* // <AuthProvider> */}
-      <Main />
-    {/* // </AuthProvider> */}
+      <AuthProvider>
+        <Main />
+      </AuthProvider>
     </Auth0Provider>
+    </GoogleOAuthProvider>
   );
 };
 
