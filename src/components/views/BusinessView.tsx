@@ -26,6 +26,25 @@ const BusinessView: React.FC = () => {
         }
     }
 
+    const base64UrlDecode = (str) => {
+        // Replace Base64URL chars
+        str = str.replace(/-/g, "+").replace(/_/g, "/");
+
+        // Pad if needed
+        while (str.length % 4) {
+            str += "=";
+        }
+
+        // Decode
+        const decoded = atob(str);
+        return decodeURIComponent(
+            decoded
+            .split("")
+            .map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+            .join("")
+        );
+    }
+
     return (
         <>
          <div style={{
@@ -37,6 +56,13 @@ const BusinessView: React.FC = () => {
                 <p>ID Token Claims</p>
                 <JsonEditor
                     data={ idToken|| {}}
+                    rootName=''
+                    maxWidth={"100%"}
+                />
+
+                <p>Id Token Header</p>
+                <JsonEditor
+                    data={idToken ? JSON.parse(base64UrlDecode(idToken.__raw.split('.')[0])) : {}}
                     rootName=''
                     maxWidth={"100%"}
                 />
