@@ -99,22 +99,20 @@ export const useAuth = () => {
 
 const App: React.FC = () => {
   return (
-    <GoogleOAuthProvider
-      clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-    >
      <Auth0Provider
       domain={import.meta.env.VITE_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
       authorizationParams={{
         scope: "openid email profile",
         redirect_uri: window.location.origin,
+        organization: import.meta.env.VITE_AUTH0_ORGANIZATION
       }}
     >
       <AuthProvider>
+        {/* <p>Welcome to the app! {import.meta.env.VITE_AUTH0_ORGANIZATION}</p> */}
         <Main />
       </AuthProvider>
     </Auth0Provider>
-    </GoogleOAuthProvider>
   );
 };
 
