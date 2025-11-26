@@ -9,8 +9,18 @@ import Login from './src/components/Login';
 import Dashboard from './src/components/Dashboard';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { useAuthenticatedUser } from './src/hooks/useAuthenticatedUser';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+// import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ApolloProvider } from "@apollo/client/react";
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { NostrEventProvider } from './src/contexts/NostrEventContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+const httpLink = new HttpLink({ uri: "https://devnet.zeko.io/graphql" });
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+});
 // Set this to true to bypass login for development and testing
 const TEST_MODE = false;
 
@@ -99,7 +109,7 @@ export const useAuth = () => {
 
 const App: React.FC = () => {
   return (
-     <Auth0Provider
+    <Auth0Provider
       domain={import.meta.env.VITE_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
       authorizationParams={{
@@ -108,10 +118,14 @@ const App: React.FC = () => {
         organization: import.meta.env.VITE_AUTH0_ORGANIZATION
       }}
     >
-      <AuthProvider>
-        {/* <p>Welcome to the app! {import.meta.env.VITE_AUTH0_ORGANIZATION}</p> */}
-        <Main />
-      </AuthProvider>
+      <NostrEventProvider>
+        <ApolloProvider client={client}>
+          <AuthProvider>
+            <Main />
+            <ToastContainer position="top-right" autoClose={3000} />
+          </AuthProvider>
+        </ApolloProvider>
+      </NostrEventProvider>
     </Auth0Provider>
   );
 };

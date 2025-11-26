@@ -6,7 +6,7 @@ import GoogleLogo from './icons/GoogleLogo';
 import MicrosoftLogo from './icons/MicrosoftLogo';
 import AppleLogo from './icons/AppleLogo';
 import { useAuth0 } from "@auth0/auth0-react";
-import { GoogleLogin } from '@react-oauth/google';
+// import { GoogleLogin } from '@react-oauth/google';
 // import { gapi } from 'gapi-script';
 import auth0Icon from './icons/auth0.svg';
 
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
             </Button> */}
             <Button
                 onClick={() => {
-                  loginWithPopup();
+                  loginWithRedirect();
                 }}
                 variant="secondary"
                 size="lg"

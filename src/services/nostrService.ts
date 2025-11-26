@@ -1,6 +1,7 @@
 // FIX: Switched to a namespace import for `nostr-tools` to resolve the module loading error "does not provide an export named...". This is a common issue with how some libraries are bundled for CDN usage.
 import * as nostrTools from 'nostr-tools';
 import type { KeyPair, SignedEvent } from '../../types';
+import { SimplePool } from 'nostr-tools';
 
 // Helper functions for hex encoding/decoding, as nostr-tools operates on Uint8Arrays for private keys.
 const bytesToHex = (bytes: Uint8Array): string => {
@@ -45,9 +46,30 @@ export const nostrService = {
 
     return nostrTools.finalizeEvent(unsignedEvent, privateKeyBytes);
   },
-
   npubEncode(pubkey: string): string {
-    // FIX: Use the namespace object to access the library's functions.
     return nostrTools.nip19.npubEncode(pubkey);
+  },
+  listenForEvents(filters: any, onEvent: (event: any) => void) {
+    const eventQueue: any[] = [];
+    const pool = new SimplePool()
+
+    const relays = [import.meta.env.VITE_RELAY]
+    console.log('Subscribing to relays:', relays, 'with filters:', filters);
+    const sub = pool.subscribeMany(
+      relays,
+      filters,
+      {
+        onevent(event) {
+          // console.log('Received Nostr event:', event);
+          eventQueue.push(event);
+          onEvent(event);
+        },
+        oneose() {
+          console.log('subscription closed')
+        }
+      }
+    )
+    
+    return sub;
   },
 };
