@@ -266,6 +266,7 @@ const BusinessView: React.FC = () => {
 
                 {sentAnchor && <p className="mt-4 text-green-400">Anchor creation request sent to backend & waiting verification!</p>}
                 
+                <p>My ACKs (Nostr Keys)</p>
                 {nostrKeys && (
                     <JsonEditor
                         data={nostrKeys || {}}
@@ -275,12 +276,13 @@ const BusinessView: React.FC = () => {
                     />
                 )}
 
+                <p>Server Events (Nostr Relay kind [8000, 8001, 8002])</p>
                 {events && (
                     <JsonEditor
                         data={events.reverse().map(v => ({content: v.content})) || {}}
                         rootName=''
                         maxWidth={"100%"}
-                        collapse
+                        collapse={1}
                     />
                 )}
             </Card>
