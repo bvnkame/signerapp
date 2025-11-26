@@ -193,6 +193,9 @@ const BusinessView: React.FC = () => {
                 emailNonceASKHash,
             })
 
+            // Timeout 2s
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
             setSentAnchor(true);
         } catch (error) {
             alert('Failed to create anchor. ' + error);
@@ -233,8 +236,6 @@ const BusinessView: React.FC = () => {
                 
                 { !contractAddressState && <p style={{color: 'red'}}>Please deploy a contract first!</p> }
 
-                { isGenerating && <FourSquare color="#32cd32" size="medium" text="" textColor="" /> }
-
                 <div className="flex space-x-4">
                     <Button 
                         onClick={() => {
@@ -263,6 +264,8 @@ const BusinessView: React.FC = () => {
                         Create Anchor
                     </Button>
                 </div>
+
+                { isGenerating && <FourSquare color="#32cd32" size="medium" text="" textColor="" /> }
 
                 {sentAnchor && <p className="mt-4 text-green-400">Anchor creation request sent to backend & waiting verification!</p>}
                 
