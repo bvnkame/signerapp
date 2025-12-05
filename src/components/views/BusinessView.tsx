@@ -79,7 +79,8 @@ const BusinessView: React.FC = () => {
 
     const [nostrKeys, setNostrKeys] = useState<{ pub: string; priv: string } | null>(null);
     const [contractAddressState, setContractAddressState] = useState(savedZkAppPublicKey);
-
+    const [creatingBP, setCreatingBP] = useState(false);
+    const [createdBP, setCreatedBP] = useState(false);
 
     const { accessToken, idToken } = useAuthenticatedUser();
     const { data, loading, error, refetch } = useQuery(CONTRACT_QUERY, {
@@ -113,9 +114,8 @@ const BusinessView: React.FC = () => {
                 kinds: [8000, 8001, 8002],
             },
             (event) => {
-                // Chỉ show toast nếu event trong vòng 10s trở lại
-                const now = Math.floor(Date.now() / 1000); // giây
-                if (event.created_at && now - event.created_at <= 10) {
+                const now = Math.floor(Date.now() / 1000); // 120 s
+                if (event.created_at && now - event.created_at <= 120) {
                     addEvent(event);
                     toast.info(`Received Nostr event: ${event.content || event.kind}`);
                 }
@@ -127,6 +127,31 @@ const BusinessView: React.FC = () => {
         }
     }, [contractAddressState]);
     
+    const handleSampleCreateBusinessProfile = async () => {
+        setIsGenerating(true);
+        setCreatingBP(true);
+        setCreatedBP(false);
+        console.log('Creating sample business profile with:', idToken);
+        try {
+           backendAPI.createBusinessProfile({
+                userPublicKey: nostrKeys?.pub || '',
+                contractPublicKey: contractAddressState || '',
+                jwt: idToken.__raw,
+           })
+
+            // Timeout 2s
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            setCreatingBP(false);
+            setCreatedBP(true);
+        }
+        catch (error) {
+            alert('Failed to create sample business profile. ' + error);
+        }
+        finally {
+            setIsGenerating(false);
+        }
+    }
+
     const handleCreateBusinessProfile = async () => {
         setIsGenerating(true);
         try {
@@ -257,6 +282,16 @@ const BusinessView: React.FC = () => {
 
                     <Button 
                         onClick={() => {
+                            setContractAddressState('');
+                            localStorage.removeItem('zkAppPublicKey');
+                        }}
+                        disabled={isGenerating || !contractAddressState}
+                    >
+                        Clear Contract
+                    </Button>
+
+                    <Button 
+                        onClick={() => {
                             handleCreateAnchor();
                         }}
                         disabled={isGenerating || !contractAddressState}
@@ -285,20 +320,42 @@ const BusinessView: React.FC = () => {
                         data={events.reverse().map(v => ({content: v.content})) || {}}
                         rootName=''
                         maxWidth={"100%"}
-                        collapse={1}
+                        collapse
                     />
                 )}
             </Card>
 
             <Card title="JWT Management" icon={<BusinessIcon />}>
-                <Button 
-                    onClick={() => {
-                        handleCreateBusinessProfile();
-                    }}
-                    disabled={isGenerating || !contractAddressState}
-                >
-                    Create Business Profile
-                </Button>
+                <div className="flex space-x-4">
+                    <Button 
+                        onClick={() => {
+                            // handleCreateBusinessProfile();
+                            handleSampleCreateBusinessProfile();
+                        }}
+                        disabled={isGenerating || !contractAddressState}
+                    >
+                        Sample Create Business Profile
+                    </Button>
+
+                    <Button 
+                        onClick={() => {
+                            // handleCreateBusinessProfile();
+                            handleSampleCreateBusinessProfile();
+                        }}
+                        disabled={isGenerating || !contractAddressState}
+                    >
+                        Set Contract Status
+                    </Button>
+
+                    <select>
+                        <option value="active">Active</option>
+                        <option value="suspended">Suspended</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                </div>
+                <br />
+                { creatingBP && <FourSquare color="#32cd32" size="medium" text="" textColor="" /> }
+                { createdBP && <p className="mt-4 text-green-400">Business profile creation request sent to backend & waiting verification!</p>}
             </Card>
 
             <Card title="Contract State Management" icon={<BusinessIcon />}>

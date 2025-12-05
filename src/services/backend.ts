@@ -63,5 +63,22 @@ export const backendAPI = {
         const data = await response.json();
         console.log("Create contract response:", data);
         return data;
+    },
+    async createBusinessProfile({userPublicKey, contractPublicKey, jwt}) {
+        const response = await fetch(`${backendURL}/create-business-profile`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userPublicKey,
+                contractPublicKey: contractPublicKey,
+                jwt: jwt
+            }),
+        });
+
+        const data = await response.json();
+        console.log("Create business profile response:", data);
+        return data;
     }
 }
