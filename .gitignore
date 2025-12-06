@@ -24,6 +24,10 @@ dist-ssr
 *.sw?
 
 .env
+.env.local
+.env.*
 auth_config.json
 
 /build
+
+*.cache

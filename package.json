@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:prod": "vite build --mode production",
     "preview": "vite preview",
     "fb:deploy:prod": "yarn build && firebase deploy --only hosting:breadsliceplatform"
   },
